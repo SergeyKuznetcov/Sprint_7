@@ -9,8 +9,8 @@ import ru.yandex.practicum.order.OrderClient;
 
 @DisplayName("Get Orders List Test")
 public class GetOrdersListTest {
-    private OrderClient orderClient = new OrderClient();
-    private OrderChecks orderChecks = new OrderChecks();
+    private final OrderClient orderClient = new OrderClient();
+    private final OrderChecks orderChecks = new OrderChecks();
 
     @Test
     @Description("Get Orders List Request without filters test")

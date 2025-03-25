@@ -25,8 +25,8 @@ import static ru.yandex.practicum.constants.Colours.GREY;
 @RunWith(Parameterized.class)
 @DisplayName("Create Order Tests")
 public class CreateOrderTests {
-    private OrderClient orderClient = new OrderClient();
-    private OrderChecks orderChecks = new OrderChecks();
+    private final OrderClient orderClient = new OrderClient();
+    private final OrderChecks orderChecks = new OrderChecks();
     Integer orderId;
 
     @Parameterized.Parameter
@@ -46,7 +46,7 @@ public class CreateOrderTests {
     @Description("Create orders with different colours")
     public void createOrderTest() {
         ValidatableResponse response = orderClient.createOrder(order);
-        orderChecks.createOrderCheck(response);
+        orderId = orderChecks.createOrderCheck(response);
     }
 
     @After

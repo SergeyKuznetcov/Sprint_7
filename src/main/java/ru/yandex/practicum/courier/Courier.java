@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @With
+@ToString
 public class Courier {
     private String login;
     private String password;

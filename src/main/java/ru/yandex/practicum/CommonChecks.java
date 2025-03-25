@@ -6,14 +6,23 @@ import org.junit.Assert;
 import ru.yandex.practicum.constants.Error;
 
 public class CommonChecks {
-    private static final String ERROR_MESSAGE_PARAMETER_NAME = "message";
+    protected static final String ERROR_MESSAGE_PATH = "message";
+    protected static final String STATUS_PATH = "ok";
 
     @Step("Check response for wrong request")
     public void checkError(ValidatableResponse response, Error expectedError) {
         String message = response.assertThat()
                 .statusCode(expectedError.getStatusCode())
                 .extract()
-                .path(ERROR_MESSAGE_PARAMETER_NAME);
+                .path(ERROR_MESSAGE_PATH);
         Assert.assertEquals(expectedError.getMessage(), message);
+    }
+
+    protected void checkStatus(ValidatableResponse response, int expectedCode) {
+        boolean status = response.assertThat()
+                .statusCode(expectedCode)
+                .extract()
+                .path(STATUS_PATH);
+        Assert.assertTrue(status);
     }
 }

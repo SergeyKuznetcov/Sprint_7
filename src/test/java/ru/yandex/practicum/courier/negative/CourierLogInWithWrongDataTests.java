@@ -20,7 +20,8 @@ import static ru.yandex.practicum.constants.Error.LOGIN_NOT_ENOUGH_DATA;
 
 @AllArgsConstructor
 @RunWith(Parameterized.class)
-public class NegativeCourierLogInTests {
+@DisplayName("Courier LogIn With Wrong Data Tests")
+public class CourierLogInWithWrongDataTests {
     private final CourierClient courierClient = new CourierClient();
     private final CourierChecks courierChecks = new CourierChecks();
 
@@ -28,7 +29,7 @@ public class NegativeCourierLogInTests {
     private String password;
     private Error expectedError;
 
-    @Parameterized.Parameters(name = "{index}: login = {0}; password = {1}; expectedError = {2}")
+    @Parameterized.Parameters(name = " {index}: login = {0}; password = {1}; expectedError = {2}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {"", "", LOGIN_NOT_ENOUGH_DATA},
@@ -39,7 +40,6 @@ public class NegativeCourierLogInTests {
     }
 
     @Test
-    @DisplayName("Negative logIn tests")
     @Description("Check logIn requests with not full and wrong data")
     public void loginWithWrongDataTest() {
         Courier courier = Courier.builder()

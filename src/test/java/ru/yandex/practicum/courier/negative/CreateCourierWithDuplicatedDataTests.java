@@ -1,4 +1,4 @@
-package ru.yandex.practicum.courier.positive;
+package ru.yandex.practicum.courier.negative;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import ru.yandex.practicum.constants.Error;
 import ru.yandex.practicum.courier.Courier;
 import ru.yandex.practicum.courier.CourierChecks;
 import ru.yandex.practicum.courier.CourierClient;
@@ -15,7 +16,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class PositiveCourierTests {
+@DisplayName("Create Courier With Duplicated Data Tests")
+public class CreateCourierWithDuplicatedDataTests {
     private final CourierClient courierClient = new CourierClient();
     private final CourierChecks courierChecks = new CourierChecks();
     private Integer courierId;
@@ -24,34 +26,36 @@ public class PositiveCourierTests {
     public String login;
     @Parameterized.Parameter(1)
     public String password;
-    @Parameterized.Parameter(2)
-    public String firstName;
 
-    @Parameterized.Parameters(name = "{index}: login = {0}; password = {1}; firstName = {2}")
+    @Parameterized.Parameters(name = " {index}: login = \"{0}\"; password = \"{1}\"")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"UserLoginExample", "password", "UserNameExample"},
-                {"Ф", "П", ""},
-                {"Другой логин", "Пароль", null}
+                {"anyLoginExample", "anyPasswordExample"}
         });
     }
 
     @Test
-    @DisplayName("Positive courier tests")
-    @Description("Check create, login and delete requests for courier")
-    public void courierTest() {
-        Courier courier = new Courier(login, password, firstName);
+    @Description("Try to create courier with existed login")
+    public void createCourierWithDuplicatedData() {
+        Courier courier = Courier.builder()
+                .login(login)
+                .password(password)
+                .build();
         ValidatableResponse response = courierClient.createCourier(courier);
         courierChecks.checkCreated(response);
 
         response = courierClient.logIn(courier);
         courierId = courierChecks.checkLogin(response);
+
+        response = courierClient.createCourier(courier);
+        courierChecks.checkError(response, Error.CREATE_COURIER_DUPLICATED_DATA);
     }
 
     @After
     public void tearDown() {
         if (courierId != null) {
             courierChecks.checkDeleted(courierClient.deleteCourier(courierId));
+            courierId = null;
         }
     }
 }
